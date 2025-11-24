@@ -43,6 +43,14 @@ export default function App() {
         return localStorage.getItem('accentColor') || '#0ea5e9'; // Default Sky 500
     });
 
+    // Theme Color Management for Safari Tab Bar
+    const [metaThemeColor, setMetaThemeColor] = useState(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('theme_color') || null;
+        }
+        return null;
+    });
+
     const dragStartRef = useRef<{ index: number, stackId?: string, stackTitle?: string } | null>(null);
 
     // Load data from DB on mount
@@ -75,7 +83,7 @@ export default function App() {
                     setTasks(data.tasks);
                     setHistory(data.history);
                     setArchivedTasks(data.archivedTasks);
-                    if (data.backgroundImage) {
+                    if (data.backgroundImage && localStorage.getItem('theme_color')) {
                         setBackgroundImage(data.backgroundImage as string);
                     }
                 }
@@ -147,21 +155,26 @@ export default function App() {
     const handleSetBackgroundImage = async (url: string | null) => {
         setBackgroundImage(url);
         if (url) {
-            saveAsset('backgroundImage', url);
+            saveAsset('backgroundImage', url); // save/override to IndexedDB
             // Calculate and save dominant color
             try {
                 const color = await getDominantColor(url, bgDarken);
-                setMetaThemeColor(color);
-                localStorage.setItem('theme_color', color);
+                setMetaThemeColor(color); // update meta theme color
+                localStorage.setItem('theme_color', color); // save to localStorage
             } catch (error) {
                 console.error("Failed to extract color", error);
             }
         } else {
+            // user click reset button
             // Clear custom color
             setMetaThemeColor(null);
             localStorage.removeItem('theme_color');
+            // clear backgroundImage state
+            setBackgroundImage(null);
         }
     };
+
+
     const tasksById = useMemo(() => new Map(tasks.map((task) => [task.id, task])), [tasks]);
 
     const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -172,13 +185,6 @@ export default function App() {
 
     const { theme, setTheme } = useTheme();
 
-    // Theme Color Management for Safari Tab Bar
-    const [metaThemeColor, setMetaThemeColor] = useState(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('theme_color') || null;
-        }
-        return null;
-    });
 
     // Apply meta theme color and update CSS variable
     useEffect(() => {
@@ -190,22 +196,22 @@ export default function App() {
         }
 
         const root = document.documentElement;
-
         const isDark = theme === 'dark' || (theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-        const defaultColor = isDark
+        const defaultColorFromAccent = isDark
             ? `color-mix(in srgb, ${accentColor} 8%, black)`
             : `color-mix(in srgb, ${accentColor} 8%, white)`;
 
         if (metaThemeColor) {
             meta.setAttribute('content', metaThemeColor);
             root.style.setProperty('--bg-color', metaThemeColor);
+            setMetaThemeColor(metaThemeColor);
         } else {
             // Fallback to theme defaults if no custom color derived from image
-            meta.setAttribute('content', defaultColor);
-            root.style.removeProperty('--bg-color'); // Revert to CSS default
+            meta.setAttribute('content', defaultColorFromAccent);
+            root.style.setProperty('--bg-color', defaultColorFromAccent);
+            // setMetaThemeColor(defaultColor);
         }
 
-        setMetaThemeColor(defaultColor);
     }, [metaThemeColor, theme, accentColor]);
 
     useEffect(() => {
@@ -445,7 +451,7 @@ export default function App() {
                         <div
                             className="absolute inset-0 opacity-0 transition-opacity duration-300"
                             style={{
-                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E")`,
+                                backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='3' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='1'/%3E%3C/svg%3E")`,
                                 opacity: bgGrain / 100,
                                 mixBlendMode: 'overlay'
                             }}
