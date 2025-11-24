@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+    --color-hero-bg: var(--bg-color);
+    --color-hero-text: var(--text-color);
+    --color-hero-accent: var(--accent-color);
+    --font-display: "Inter", sans-serif;
+}
+
+
+:root {
+    color-scheme: light;
+    /* Light Mode Variables */
+    --bg-color: color(display-p3 0.941 0.976 1);
+    /* Sky 50 */
+    --text-color: color(display-p3 0.059 0.090 0.165);
+    /* Slate 900 */
+    --accent-color: color(display-p3 0.055 0.647 0.914);
+    /* Sky 500 */
+
+    --glass-panel-bg: color(display-p3 0.99 0.99 0.99 / 0.4);
+    --glass-panel-border: color(display-p3 1 1 1 / 0.6);
+    --glass-panel-shadow: 0 8px 32px 0 color(display-p3 0.122 0.149 0.529 / 0.15);
+
+    /* Safari Blur Fixes */
+    --safari-blur-fix: translate3d(0, 0, 0);
+
+    --glass-card-bg: color(display-p3 1 1 1 / 0.3);
+    --glass-card-border: color(display-p3 1 1 1 / 0.6);
+    --glass-card-hover-bg: color(display-p3 1 1 1 / 0.6);
+    --glass-card-text: color(display-p3 0.2 0.255 0.333);
+    /* Slate 700 */
+    --glass-card-text-muted: color(display-p3 0.392 0.455 0.545);
+    /* Slate 500 */
+
+    --bg-gradient:
+        radial-gradient(125% 125% at 50% 0%, color-mix(in srgb, var(--accent-color) 5%, white) 50%, var(--accent-color));
+}
+
+.dark {
+    color-scheme: dark;
+    /* Dark Mode Variables */
+    --bg-color: color(display-p3 0.059 0.090 0.165);
+    /* Slate 900 */
+    --text-color: color(display-p3 0.973 0.980 0.988);
+    /* Slate 50 */
+    --accent-color: color(display-p3 0.220 0.741 0.973);
+    /* Sky 400 */
+
+    --glass-panel-bg: color(display-p3 1 1 1 / 0.05);
+    --glass-panel-border: color(display-p3 1 1 1 / 0.1);
+    --glass-panel-shadow: 0 8px 32px 0 color(display-p3 0 0 0 / 0.37);
+
+    --glass-card-bg: color(display-p3 1 1 1 / 0.1);
+    --glass-card-border: color(display-p3 1 1 1 / 0.2);
+    --glass-card-hover-bg: color(display-p3 1 1 1 / 0.18);
+    --glass-card-text: color(display-p3 0.886 0.910 0.941);
+    /* Slate 200 */
+    --glass-card-text-muted: color(display-p3 0.580 0.639 0.722);
+    /* Slate 400 */
+
+    --bg-gradient:
+        radial-gradient(125% 125% at 50% 0%, color-mix(in srgb, var(--accent-color) 5%, black) 50%, color-mix(in srgb, var(--accent-color) 60%, black));
+}
+
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-display);
+    background-image: var(--bg-gradient);
+    background-attachment: fixed;
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
