@@ -3,6 +3,7 @@
 Manage your tasks in a stack-like Kanban board. Fully offline, using localStorage and IndexedDB. [Use it now!](https://stack-manager.vercel.app/)
 
 <!-- put a screenshot here -->
+![Stack Manager](SCREENSHOT.png)
 
 ## Features
 
@@ -44,7 +45,7 @@ Make the workspace truly yours with extensive personalization options:
 
 1.  Clone the repository:
     ```bash
-    git clone <repository-url>
+    git clone https://github.com/xyy-cas/stack-manager
     cd stack-manager
     ```
 
