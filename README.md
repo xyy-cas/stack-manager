@@ -1,6 +1,6 @@
 # Stack Manager
 
-Manage your tasks in a stack-like Kanban board. Fully offline, using localStorage and IndexedDB. [Use it now!](https://stack-manager.vercel.app/)
+Manage your tasks in a stack-like Kanban board. Fully offline, using localStorage and IndexedDB. [Use it now!](https://xyy-cas.github.io/stack-manager/) (CN mainland users can also use [this](https://xyy.ac.cn/h/stack-manager/))
 
 <!-- put a screenshot here -->
 ![Stack Manager](SCREENSHOT.png)
