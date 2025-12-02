@@ -127,7 +127,7 @@ const getActionConfig = (type: HistoryActionType) => {
 };
 
 const formatDate = (date: Date) => {
-    return `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')}`;
+    return `${date.getFullYear()}/${date.getMonth() + 1}/${date.getDate()}`;
 };
 
 const getHeatMapData = (history: HistoryItem[]) => {
@@ -310,7 +310,7 @@ export function HistoryPanel({ isOpen, onClose, history, onDeleteHistoryItem, ac
                                                 cx={(props.x as number) + (props.width as number) / 2}
                                                 cy={(props.y as number) + (props.height as number) / 2}
                                                 r={1.5}
-                                                fill={accentColor}
+                                                fill="#eeeeee"
                                                 style={{ pointerEvents: 'none' }}
                                             />
                                         </g>
