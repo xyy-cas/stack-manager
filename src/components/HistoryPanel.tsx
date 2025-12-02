@@ -170,7 +170,9 @@ const hexToRgb = (hex: string) => {
 export function HistoryPanel({ isOpen, onClose, history, onDeleteHistoryItem, accentColor }: Props) {
     if (!isOpen) return null;
 
-    const heatMapData = getHeatMapData(history);
+    // Sort history by timestamp to ensure consistent order (IndexedDB returns by ID/random)
+    const sortedHistory = [...history].sort((a, b) => a.timestamp - b.timestamp);
+    const heatMapData = getHeatMapData(sortedHistory);
     const today = new Date();
     const todayStr = formatDate(today);
 
@@ -321,12 +323,12 @@ export function HistoryPanel({ isOpen, onClose, history, onDeleteHistoryItem, ac
                     </div>
 
                     <div className="flex-1 overflow-y-auto pr-2 space-y-4">
-                        {history.length === 0 ? (
+                        {sortedHistory.length === 0 ? (
                             <div className="text-center py-12 text-(--glass-card-text-muted)">
                                 <p>No history yet.</p>
                             </div>
                         ) : (
-                            history.slice().reverse().map((item) => {
+                            sortedHistory.slice().reverse().map((item) => {
                                 const config = getActionConfig(item.actionType);
                                 return (
                                     <div

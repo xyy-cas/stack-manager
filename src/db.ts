@@ -97,6 +97,7 @@ export const saveHistory = async (history: HistoryItem[]) => {
     // Actually, for history, it's safer to just add individual items as they happen
     // to avoid overwriting with stale state if multiple tabs were open (though not a requirement here).
     // But to stick to the "sync state to DB" pattern:
+    // console.log('Saving history to DB:', history);
     await db.transaction('rw', db.history, async () => {
         await db.history.clear();
         await db.history.bulkAdd(history);
